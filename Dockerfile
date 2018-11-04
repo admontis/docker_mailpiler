@@ -39,5 +39,5 @@ ADD ./default.conf /etc/nginx/conf.d/
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-EXPOSE 25/tcp 9306/tcp 80/tcp
+EXPOSE 25/tcp 80/tcp
 CMD ["/startup.sh"]

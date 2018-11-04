@@ -1,6 +1,6 @@
 FROM debian:stretch-slim
 
-RUN apt-get -y update && apt-get -y upgrade 
+RUN apt-get -y update && apt-get -y upgrade
 
 RUN apt-get -y install sudo curl htop mc ntp ntpdate locate unzip file lftp figlet mtr-tiny dialog dnsutils lsb-release ca-certificates bash-completion \
     build-essential catdoc checkinstall gettext php-curl php-gd php-ldap php-memcache php-mysql \
@@ -14,10 +14,10 @@ RUN mkdir -p /usr/src/piler && \
   cd /usr/src/piler && ./configure --localstatedir=/var --with-database=mysql --enable-tcpwrappers --enable-memcached && make && make install && \
   echo /usr/local/lib > /etc/ld.so.conf.d/local.conf && ldconfig && \
   sed -e'/load_default_values$/q' ./util/postinstall.sh > /tmp/postinstall.sh && \
-  cd /tmp && echo $'make_cron_entries\ncrontab -u $PILERUSER $CRON_TMP\nclean_up_temp_stuff' >> postinstall.sh && sh postinstall.sh && rm postinstall.sh 
+  cd /tmp && echo $'make_cron_entries\ncrontab -u $PILERUSER $CRON_TMP\nclean_up_temp_stuff' >> postinstall.sh && sh postinstall.sh && rm postinstall.sh
 
 
-#RUN dpkg -P build-essential checkinstall dpkg-dev g++ libssl-dev libtre-dev libzip-dev libmysql++-dev libmemcached-dev libwrap0-dev gcc make && apt-get -y autoremove
+RUN dpkg -P build-essential checkinstall dpkg-dev g++ libssl-dev libtre-dev libzip-dev libmysql++-dev libmemcached-dev libwrap0-dev gcc make && apt-get -y autoremove
 
 RUN rm -rf /var/lib/mysql/*
 

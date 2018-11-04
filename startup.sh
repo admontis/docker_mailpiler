@@ -1,10 +1,6 @@
 #!/bin/sh
 
 
-
-#while true; do sleep 1; done
-
-
 if [ ! -d /var/lib/mysql/mysql ]; then
   mysql_install_db
   /etc/init.d/mysql start
@@ -15,10 +11,10 @@ fi
 if [ ! -f /usr/local/etc/piler/piler.key ]; then
 
   cp /usr/src/piler/etc/*.dist /usr/local/etc/piler
+  cp /usr/src/piler/etc/piler.conf /usr/local/etc/piler/piler.conf.dist
 
   /etc/init.d/mysql start
-  cd /usr/src/piler
-  /postinstall.sh
+  cd /usr/src/piler && /postinstall.sh
 
   indexer -c /usr/local/etc/piler/sphinx.conf --all
 
@@ -52,5 +48,21 @@ EOF
 
 fi
 
+sed -i 's/server_name\ localhost/server_name\ '${NGINX_HOSTNAME:-localhost}'/g' /etc/nginx/conf.d/default.conf
+
+cat > /var/spool/cron/crontabs/piler <<EOF
+   ### PILERSTART
+   5,35 * * * * /usr/local/libexec/piler/indexer.delta.sh
+   30   2 * * * /usr/local/libexec/piler/indexer.main.sh
+   15,45 * * * * /usr/local/libexec/piler/indexer.attachment.sh
+   */15 * * * * /usr/bin/indexer --quiet tag1 --rotate --config /usr/local/etc/piler/sphinx.conf
+   */15 * * * * /usr/bin/indexer --quiet note1 --rotate --config /usr/local/etc/piler/sphinx.conf
+   30   6 * * * /usr/bin/php /usr/local/libexec/piler/generate_stats.php --webui /var/piler/www >/dev/null
+   */5 * * * * /usr/bin/find /var/piler/www/tmp -type f -name i.\* -exec rm -f {} \;
+   ### PILEREND
+
+EOF
+
+chown piler:piler /var/spool/cron/crontabs/piler
 
 /usr/bin/supervisord

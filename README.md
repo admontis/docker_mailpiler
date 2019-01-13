@@ -1,6 +1,7 @@
-# docker_mailpiler
+# Mailpiler for Docker
 
-To create a new container:
+Creates a self contained mailpiler installation - including all relevant components
+
 
 docker stop mailpiler
 

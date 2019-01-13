@@ -24,4 +24,5 @@ docker run  -d --name=mailpiler \
   -v `pwd`/localstore/www:/var/piler/www \
   -v `pwd`/localstore/mysql:/var/lib/mysql \
   -v `pwd`/localstore/config:/usr/local/etc/piler \
+  --restart unless-stopped \
  mailpiler

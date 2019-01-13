@@ -64,5 +64,7 @@ cat > /var/spool/cron/crontabs/piler <<EOF
 EOF
 
 chown piler:piler /var/spool/cron/crontabs/piler
+chown -R piler:piler /var/piler
+usermod -a -G crontab piler
 
 /usr/bin/supervisord

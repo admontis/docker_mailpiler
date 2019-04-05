@@ -5,7 +5,7 @@ RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install sudo curl htop mc ntp ntpdate locate unzip file lftp figlet mtr-tiny dialog dnsutils lsb-release ca-certificates bash-completion \
     build-essential catdoc checkinstall gettext php-curl php-gd php-ldap php-memcache php-mysql \
     libltdl7 libssl-dev libtre-dev libtre5 memcached mysql-client mysql-common mysql-server openssl libzip4 poppler-utils sysstat tnef unrtf \
-    python-mysqldb nginx php-fpm sphinxsearch libzip-dev libmysql++-dev libmemcached-dev libwrap0-dev supervisor hostname vim
+    python-mysqldb nginx php-fpm sphinxsearch libzip-dev libmysql++-dev libmemcached-dev libwrap0-dev supervisor hostname vim php-zip
 
 RUN groupadd piler && useradd -g piler -m -s /bin/sh -d /var/piler piler && usermod -L piler && chmod 755 /var/piler
 
@@ -29,7 +29,7 @@ ADD startup.sh /
 RUN chmod 755 /postinstall.sh
 RUN chmod 755 /run_postinstall.sh
 RUN chmod 755 /startup.sh
-
+RUN chmod 777 /var/piler/tmp
 
 RUN mkdir -p /var/log/supervisor
 RUN mkdir -p /run/php
